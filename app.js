@@ -13,7 +13,8 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 // MongoDB
-const uri = "mongodb+srv://JKSdb:JKS-mongo-shell-2001...@jks.tqqp75s.mongodb.net/"
+const uri =
+  "mongodb+srv://JKSdb:JKS-mongo-shell-2001...@jks.tqqp75s.mongodb.net/";
 mongoose.connect(
   uri,
   () => console.log("Connected DB succesfully"),
@@ -22,14 +23,14 @@ mongoose.connect(
 // Schema
 const userSchema = mongoose.Schema({
   _id: String,
-  password: String
-},)
-const userModel = mongoose.model("userDetail", userSchema)
+  password: String,
+});
+const userModel = mongoose.model("userDetail", userSchema);
 
 // listen to PORT number
 const portNum = process.env.PORT || 3000;
 app.listen(portNum, async () => {
-  console.log('Server started at Port number', portNum);
+  console.log("Server started at Port number", portNum);
 });
 
 // declare home page
@@ -38,12 +39,14 @@ app.get("/", async (req, res) => {
 });
 
 // declare register page
-app.get("/register", (req, res) => {
-  res.render("register.ejs", {
-    cssFile: "register-login.css",
-    jsFile: "register-script.js",
+app
+  .route("/register")
+  .get((req, res) => {
+    res.render("register.ejs", {
+      cssFile: "register-login.css",
+      jsFile: "register-script.js",
+    });
   });
-});
 
 // declare login page
 app.get("/login", (req, res) => {
