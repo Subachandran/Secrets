@@ -1,0 +1,29 @@
+<%- include('partials/header') %>
+
+  <div class="container p-5 position-relative">
+    <div class="invalidPassword position-absolute top-0 start-0 bg-danger text-white text-center w-100 p-3">Invalid user
+      credentials! Please try again...</div>
+    <div class="title">
+      <h1>Login</h1>
+      <p>Welcome back!! </p>
+    </div>
+    <form action="login" method="post" class="form row g-3">
+      <div class="form-floating">
+        <input type="email" name="email" id="email" class="form-control" placeholder=" " />
+        <label for="email">Email</label>
+      </div>
+      <div class="form-floating">
+        <input type="password" name="Password" id="Password" class="form-control" placeholder=" " />
+        <label for="Password">Password</label>
+      </div>
+      <input type="submit" value="Create Account" class="btn bg-primary text-white" />
+    </form>
+  </div>
+  <script>
+    $(".invalidPassword").hide()
+    if (<%= typeof invalidPwd !== 'undefined' %>) {
+      $(".invalidPassword").fadeIn(500).delay(2000).fadeOut(200)
+    }
+  </script>
+
+  <%- include('partials/footer') %>

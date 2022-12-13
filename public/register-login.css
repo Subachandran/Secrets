@@ -1,0 +1,32 @@
+body {
+  display: grid;
+  place-items: center;
+}
+.container {
+  width: 50%;
+  min-width: min(500px, 100vw);
+  background-color: white;
+}
+
+form > div {
+  position: relative;
+  margin: 1em auto;
+}
+
+form label {
+
+  transition: all 100ms ease-in;
+}
+
+form input[type=email],input[type=password] {
+  width: 100%;
+  border: none;
+  border-radius: .3em;
+  background-color: rgba(71, 71, 71, 0.1);
+}
+
+input[type=submit] {
+  width: fit-content;
+  padding: auto 10%;
+  margin-inline: auto;
+}

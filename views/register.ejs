@@ -1,0 +1,49 @@
+<%- include('partials/header') %>
+
+<div class="container p-5">
+  <div class="title">
+    <h1>Register</h1>
+    <p>Don't worry, your secrets will be shared anonymously...</p>
+  </div>
+  <form action="register" method="post" class="form row g-3">
+    <div class="form-floating">
+      <input
+        type="email"
+        name="email"
+        id="email"
+        class="form-control"
+        placeholder="name@email.com"
+      />
+      <label for="email">Email</label>
+    </div>
+    <div class="form-floating">
+      <input
+        type="password"
+        name="createPassword"
+        id="createPassword"
+        class="form-control"
+        placeholder="password"
+      />
+      <label for="createPassword">Create Password</label>
+    </div>
+    <div class="form-floating">
+      <input
+        type="password"
+        name="confirmPassword"
+        id="confirmPassword"
+        class="form-control"
+        placeholder="password"
+      />
+      <label for="confirmPassword">Confirm Password</label>
+    </div>
+    <input
+      type="submit"
+      value="Create Account"
+      class="btn bg-primary text-white"
+    />
+  </form>
+</div>
+
+
+<%- include('partials/footer') %>
+
