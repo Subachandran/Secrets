@@ -46,6 +46,9 @@ app
       cssFile: "register-login.css",
       jsFile: "register-script.js",
     });
+  })
+  .post((req, res) => {
+    console.log("Post request");
   });
 
 // declare login page
