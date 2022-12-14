@@ -1,4 +1,4 @@
-<%- include('partials/header') %>
+[/- include('partials/header') /]
 
   <div class="container p-5 position-relative">
     <div class="popUp position-absolute top-0 start-0 text-white text-center w-100 p-3"></div>
@@ -20,19 +20,19 @@
   </div>
   <script>
     $(".popUp").hide()
-    if (<%= typeof invalidPwd !== 'undefined' %>) {
+    if ([/= typeof invalidPwd !== 'undefined' /]) {
       $(".popUp")
         .html("Invalid user credentials! Please try again...")
         .css('background-color', 'red')
         .fadeIn(500).delay(2000).fadeOut(200)
     }
-    if (<%= typeof profileExists !== 'undefined' %>) {
+    if ([/= typeof profileExists !== 'undefined' /]) {
       $(".popUp")
         .html("Account exists already. Please login")
         .css('background-color', '#0d6efd')
         .fadeIn(500).delay(2000).fadeOut(200)
     }
-    if (<%= typeof isAccountCreated !== 'undefined' %>) {
+    if ([/= typeof isAccountCreated !== 'undefined' /]) {
       $(".popUp")
         .html("Account created successfully. Please login")
         .css('background-color', 'green')
@@ -40,4 +40,4 @@
     }
   </script>
 
-  <%- include('partials/footer') %>
+  [/- include('partials/footer') /]

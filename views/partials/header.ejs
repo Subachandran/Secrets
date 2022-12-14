@@ -34,16 +34,16 @@
     </style>
 
     <!-- CSS File -->
-    <% var css = (locals.cssFile) ? cssFile : 'style.css' %>
-    <link rel="stylesheet" href="<%=css%> " />
+    [/ var css = (locals.cssFile) ? cssFile : 'style.css' /]
+    <link rel="stylesheet" href="[/= css /] " />
 
     <!-- JS File -->
-    <% var js = (locals.jsFile) ? jsFile : 'script.js' %>
-    <script src="<%=js%>" defer></script>
+    [/ var js = (locals.jsFile) ? jsFile : 'script.js' /]
+    <script src="[/= js /]" defer></script>
 
     <!-- Title -->
-    <% let title = (locals.title) ? title : 'Secrets' %>
-    <title><%=title%></title>
+    [/ let title = (locals.title) ? title : 'Secrets' /]
+    <title>[/= title /]</title>
   </head>
   <body></body>
 </html>
