@@ -39,7 +39,8 @@ app.get("/", async (req, res) => {
 });
 
 // declare register page
-var profileExists = false;
+var profileExists,
+  isAccountCreated = false;
 app
   .route("/register")
   .get((req, res) => {
@@ -57,8 +58,10 @@ app
       res.redirect("/login");
     } else {
       await userModel.insertMany([{ _id: mailId, password: pwd }], (err) => {
-        if (!err) res.render("secrets.ejs");
-        else res.redirect("/register");
+        if (!err) {
+          isAccountCreated = true;
+          res.redirect("/login");
+        } else res.redirect("/register");
       });
     }
   });
@@ -71,5 +74,11 @@ app.route("/login").get((req, res) => {
       profileExists: true,
     });
     profileExists = false;
-  } else res.render("login.ejs", { cssFile: "register-login.css" });
+  } else {
+    res.render("login.ejs", {
+      cssFile: "register-login.css",
+      isAccountCreated: true,
+    });
+    isAccountCreated = false
+  }
 });

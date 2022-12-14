@@ -32,6 +32,12 @@
         .css('background-color', '#0d6efd')
         .fadeIn(500).delay(2000).fadeOut(200)
     }
+    if (<%= typeof isAccountCreated !== 'undefined' %>) {
+      $(".invalidPassword")
+        .html("Account created successfully. Please login")
+        .css('background-color', 'green')
+        .fadeIn(500).delay(2000).fadeOut(200)
+    }
   </script>
 
   <%- include('partials/footer') %>
