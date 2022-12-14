@@ -40,7 +40,8 @@ app.get("/", async (req, res) => {
 
 // declare register page
 var profileExists,
-  isAccountCreated = false;
+  isAccountCreated,
+  invalidPwd = false;
 app
   .route("/register")
   .get((req, res) => {
@@ -67,18 +68,39 @@ app
   });
 
 // declare login page
-app.route("/login").get((req, res) => {
-  if (profileExists) {
-    res.render("login.ejs", {
-      cssFile: "register-login.css",
-      profileExists: true,
-    });
-    profileExists = false;
-  } else {
-    res.render("login.ejs", {
-      cssFile: "register-login.css",
-      isAccountCreated: true,
-    });
-    isAccountCreated = false
-  }
-});
+app
+  .route("/login")
+  .get((req, res) => {
+    if (profileExists) {
+      res.render("login.ejs", {
+        cssFile: "register-login.css",
+        profileExists: true,
+      });
+      profileExists = false;
+    } else if (isAccountCreated) {
+      res.render("login.ejs", {
+        cssFile: "register-login.css",
+        isAccountCreated: true,
+      });
+      isAccountCreated = false;
+    } else if (invalidPwd) {
+      res.render("login.ejs", {
+        cssFile: "register-login.css",
+        invalidPwd: true,
+      });
+      invalidPwd = false;
+    } else {
+      res.render("login.ejs", { cssFile: "register-login.css" });
+    }
+  })
+  .post(async (req, res) => {
+    let mailId = req.body.email;
+    let password = req.body.password;
+    const userCred = await userModel.findById(mailId).exec();
+    if (userCred?.password === password) {
+      res.render("secrets");
+    } else {
+      invalidPwd = true;
+      res.redirect("/login");
+    }
+  });
