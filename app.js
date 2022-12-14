@@ -39,6 +39,7 @@ app.get("/", async (req, res) => {
 });
 
 // declare register page
+var profileExists = false;
 app
   .route("/register")
   .get((req, res) => {
@@ -47,12 +48,28 @@ app
       jsFile: "register-script.js",
     });
   })
-  .post((req, res) => {
-    console.log("Post request");
-    
+  .post(async (req, res) => {
+    let mailId = req.body.email;
+    let pwd = req.body.createPassword;
+    let mailIds = await userModel.findById(mailId).exec();
+    if (mailIds) {
+      profileExists = true;
+      res.redirect("/login");
+    } else {
+      await userModel.insertMany([{ _id: mailId, password: pwd }], (err) => {
+        if (!err) res.render("secrets.ejs");
+        else res.redirect("/register");
+      });
+    }
   });
 
 // declare login page
-app.get("/login", (req, res) => {
-  res.render("login.ejs", { cssFile: "register-login.css" });
+app.route("/login").get((req, res) => {
+  if (profileExists) {
+    res.render("login.ejs", {
+      cssFile: "register-login.css",
+      profileExists: true,
+    });
+    profileExists = false;
+  } else res.render("login.ejs", { cssFile: "register-login.css" });
 });
