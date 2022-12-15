@@ -44,9 +44,7 @@ app.get("/", async (req, res) => {
 });
 
 // declare register page
-var profileExists,
-  isAccountCreated,
-  invalidPwd = false;
+var profileExists = (isAccountCreated = invalidPwd = false);
 app
   .route("/register")
   .get((req, res) => {
@@ -56,14 +54,13 @@ app
     });
   })
   .post(async (req, res) => {
-    let mailId = req.body.email;
-    let pwd = req.body.createPassword;
+    let { email: mailId, createPassword: password } = req.body;
     let mailIds = await userModel.findById(mailId).exec();
     if (mailIds) {
       profileExists = true;
       res.redirect("/login");
     } else {
-      await userModel.insertMany([{ _id: mailId, password: pwd }], (err) => {
+      await userModel.insertMany([{ _id: mailId, password }], (err) => {
         if (!err) {
           isAccountCreated = true;
           res.redirect("/login");
@@ -76,31 +73,16 @@ app
 app
   .route("/login")
   .get((req, res) => {
-    if (profileExists) {
-      res.render("login.ejs", {
-        cssFile: "register-login.css",
-        profileExists: true,
-      });
-      profileExists = false;
-    } else if (isAccountCreated) {
-      res.render("login.ejs", {
-        cssFile: "register-login.css",
-        isAccountCreated: true,
-      });
-      isAccountCreated = false;
-    } else if (invalidPwd) {
-      res.render("login.ejs", {
-        cssFile: "register-login.css",
-        invalidPwd: true,
-      });
-      invalidPwd = false;
-    } else {
-      res.render("login.ejs", { cssFile: "register-login.css" });
-    }
+    res.render("login.ejs", {
+      cssFile: "register-login.css",
+      profileExists,
+      isAccountCreated,
+      invalidPwd,
+    });
+    profileExists = isAccountCreated = invalidPwd = false;
   })
   .post(async (req, res) => {
-    let mailId = req.body.email;
-    let password = req.body.password;
+    let { email: mailId, password } = req.body;
     const userCred = await userModel.findById(mailId).exec();
     if (userCred?.password === password) {
       res.render("secrets");

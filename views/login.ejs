@@ -20,19 +20,19 @@
   </div>
   <script>
     $(".popUp").hide()
-    if ([/= typeof invalidPwd !== 'undefined' /]) {
+    if ([/= invalidPwd /]) {
       $(".popUp")
         .html("Invalid user credentials! Please try again...")
         .css('background-color', 'red')
         .fadeIn(500).delay(2000).fadeOut(200)
     }
-    if ([/= typeof profileExists !== 'undefined' /]) {
+    if ([/= profileExists /]) {
       $(".popUp")
         .html("Account exists already. Please login")
         .css('background-color', '#0d6efd')
         .fadeIn(500).delay(2000).fadeOut(200)
     }
-    if ([/= typeof isAccountCreated !== 'undefined' /]) {
+    if ([/= isAccountCreated /]) {
       $(".popUp")
         .html("Account created successfully. Please login")
         .css('background-color', 'green')
