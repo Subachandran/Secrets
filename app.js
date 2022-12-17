@@ -3,10 +3,11 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const ejs = require("ejs");
+const encrypt = require("mongoose-encryption");
 
-ejs.delimiter = '/';
-ejs.openDelimiter = '[';
-ejs.closeDelimiter = ']';
+ejs.delimiter = "/";
+ejs.openDelimiter = "[";
+ejs.closeDelimiter = "]";
 
 // call express
 const app = express();
@@ -19,17 +20,19 @@ app.set("view engine", "ejs");
 
 // MongoDB
 const uri =
-  "mongodb+srv://JKSdb:JKS-mongo-shell-2001...@jks.tqqp75s.mongodb.net/";
+  "mongodb+srv://JKSdb:JKS-mongo-shell-2001...@jks.tqqp75s.mongodb.net/Secrets";
 mongoose.connect(
   uri,
   () => console.log("Connected DB succesfully"),
   (e) => console.error(e)
 );
 // Schema
-const userSchema = mongoose.Schema({
+const userSchema = new mongoose.Schema({
   _id: String,
   password: String,
 });
+const secret = "ThisIsASecretStringForPasswordEncription";
+userSchema.plugin(encrypt, { secret: secret, encryptedFields: ["password"] });
 const userModel = mongoose.model("userDetail", userSchema);
 
 // listen to PORT number
@@ -60,7 +63,8 @@ app
       profileExists = true;
       res.redirect("/login");
     } else {
-      await userModel.insertMany([{ _id: mailId, password }], (err) => {
+      let newUser = userModel({ _id: mailId, password });
+      await newUser.save((err) => {
         if (!err) {
           isAccountCreated = true;
           res.redirect("/login");
