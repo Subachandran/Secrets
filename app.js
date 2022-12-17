@@ -1,4 +1,5 @@
 // install required modules
+require('dotenv').config()
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -19,8 +20,7 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 // MongoDB
-const uri =
-  "mongodb+srv://JKSdb:JKS-mongo-shell-2001...@jks.tqqp75s.mongodb.net/Secrets";
+const uri = process.env.MONGODB_CONNECTION_URI;
 mongoose.connect(
   uri,
   () => console.log("Connected DB succesfully"),
@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
   _id: String,
   password: String,
 });
-const secret = "ThisIsASecretStringForPasswordEncription";
+const secret = process.env.SECRET_STRING;
 userSchema.plugin(encrypt, { secret: secret, encryptedFields: ["password"] });
 const userModel = mongoose.model("userDetail", userSchema);
 
