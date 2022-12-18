@@ -4,7 +4,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const ejs = require("ejs");
-const md5 = require("md5");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 ejs.delimiter = "/";
 ejs.openDelimiter = "[";
@@ -55,19 +56,20 @@ app
     });
   })
   .post(async (req, res) => {
-    let mailId = req.body.email,
-      password = md5(req.body.createPassword);
+    let mailId = req.body.email;
     let mailIds = await userModel.findById(mailId).exec();
     if (mailIds) {
       profileExists = true;
       res.redirect("/login");
     } else {
-      let newUser = userModel({ _id: mailId, password });
-      await newUser.save((err) => {
-        if (!err) {
-          isAccountCreated = true;
-          res.redirect("/login");
-        } else res.redirect("/register");
+      bcrypt.hash(req.body.createPassword, saltRounds).then(async (hash) => {
+        let newUser = userModel({ _id: mailId, password: hash });
+        await newUser.save((err) => {
+          if (!err) {
+            isAccountCreated = true;
+            res.redirect("/login");
+          } else res.redirect("/register");
+        });
       });
     }
   });
@@ -85,10 +87,10 @@ app
     profileExists = isAccountCreated = invalidPwd = false;
   })
   .post(async (req, res) => {
-    let mailId = req.body.email,
-      password = md5(req.body.password);
+    let mailId = req.body.email;
     const userCred = await userModel.findById(mailId).exec();
-    if (userCred?.password === password) {
+    const match = await bcrypt.compare(req.body.password, userCred?.password)
+    if (match) {
       res.render("secrets");
     } else {
       invalidPwd = true;
