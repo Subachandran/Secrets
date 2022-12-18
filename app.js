@@ -1,10 +1,10 @@
 // install required modules
-require('dotenv').config()
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const ejs = require("ejs");
-const encrypt = require("mongoose-encryption");
+const md5 = require("md5");
 
 ejs.delimiter = "/";
 ejs.openDelimiter = "[";
@@ -31,8 +31,6 @@ const userSchema = new mongoose.Schema({
   _id: String,
   password: String,
 });
-const secret = process.env.SECRET_STRING;
-userSchema.plugin(encrypt, { secret: secret, encryptedFields: ["password"] });
 const userModel = mongoose.model("userDetail", userSchema);
 
 // listen to PORT number
@@ -57,7 +55,8 @@ app
     });
   })
   .post(async (req, res) => {
-    let { email: mailId, createPassword: password } = req.body;
+    let mailId = req.body.email,
+      password = md5(req.body.createPassword);
     let mailIds = await userModel.findById(mailId).exec();
     if (mailIds) {
       profileExists = true;
@@ -86,7 +85,8 @@ app
     profileExists = isAccountCreated = invalidPwd = false;
   })
   .post(async (req, res) => {
-    let { email: mailId, password } = req.body;
+    let mailId = req.body.email,
+      password = md5(req.body.password);
     const userCred = await userModel.findById(mailId).exec();
     if (userCred?.password === password) {
       res.render("secrets");
