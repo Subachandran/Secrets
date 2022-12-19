@@ -1,7 +1,6 @@
 // install required modules
 require("dotenv").config();
 const express = require("express");
-const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const ejs = require("ejs");
 const bcrypt = require("bcrypt");
@@ -14,7 +13,7 @@ ejs.closeDelimiter = "]";
 // call express
 const app = express();
 // use bodyParser
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 // set-up public folder
 app.use(express.static("public"));
 // set view engine for ejs
